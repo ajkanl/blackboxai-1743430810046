@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduler - Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex flex-col">
+        <!-- Hero Section -->
+        <div class="relative bg-cover bg-center h-screen" style="background-image: url('https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');">
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            <div class="relative z-10 flex flex-col items-center justify-center h-full text-white px-4">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-center">Task Scheduler</h1>
+                <p class="text-xl md:text-2xl mb-12 text-center max-w-2xl">
+                    Organize your day efficiently with our smart task scheduling system
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="/signup.html" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        Sign Up
+                    </a>
+                    <a href="/login.html" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-3 px-8 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
+                        Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-12">Key Features</h2>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center p-6">
+                        <div class="text-blue-600 text-4xl mb-4">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Task Management</h3>
+                        <p class="text-gray-600">Easily create and manage your daily tasks</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-blue-600 text-4xl mb-4">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Secure Authentication</h3>
+                        <p class="text-gray-600">OTP verification for enhanced security</p>
+                    </div>
+                    <div class="text-center p-6">
+                        <div class="text-blue-600 text-4xl mb-4">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Schedule Tasks</h3>
+                        <p class="text-gray-600">Plan your tasks with specific date and time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <p>&copy; 2023 Task Scheduler. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
