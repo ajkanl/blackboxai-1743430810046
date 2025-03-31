@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduler - Tasks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex flex-col">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="/" class="flex items-center text-xl font-bold text-blue-600">
+                            <i class="fas fa-tasks mr-2"></i>
+                            Task Scheduler
+                        </a>
+                    </div>
+                    <div class="flex items-center">
+                        <button id="logoutBtn" class="text-gray-600 hover:text-gray-900">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-grow container mx-auto px-4 py-8">
+            <!-- New Task Form -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-semibold mb-6">Schedule New Task</h2>
+                <form id="taskForm" class="space-y-4">
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">Task Title</label>
+                        <input type="text" id="title" name="title" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" rows="3" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                    </div>
+                    <div>
+                        <label for="scheduledDate" class="block text-sm font-medium text-gray-700">Date & Time</label>
+                        <input type="datetime-local" id="scheduledDate" name="scheduledDate" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <i class="fas fa-plus mr-2"></i>
+                            Add Task
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Tasks Display -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Today's Tasks -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-calendar-day text-blue-600 mr-2"></i>
+                        Today's Tasks
+                    </h2>
+                    <div id="todayTasks" class="space-y-4">
+                        <!-- Tasks will be dynamically inserted here -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Tasks -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h2 class="text-2xl font-semibold mb-6 flex items-center">
+                        <i class="fas fa-calendar-week text-blue-600 mr-2"></i>
+                        Upcoming Tasks
+                    </h2>
+                    <div id="upcomingTasks" class="space-y-4">
+                        <!-- Tasks will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-4 mt-8">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <p>&copy; 2023 Task Scheduler. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Get user email from localStorage (set during login)
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            window.location.href = '/login.html';
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Create task element
+        function createTaskElement(task) {
+            return `
+                <div class="bg-gray-50 rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
+                    <h3 class="font-semibold text-lg text-gray-800">${task.title}</h3>
+                    <p class="text-gray-600 mt-1">${task.description}</p>
+                    <p class="text-sm text-gray-500 mt-2">
+                        <i class="far fa-clock mr-1"></i>
+                        ${formatDate(task.scheduledDate)}
+                    </p>
+                </div>
+            `;
+        }
+
+        // Fetch and display tasks
+        async function fetchTasks() {
+            try {
+                const response = await fetch(`/tasks/${userEmail}`);
+                const data = await response.json();
+
+                const todayTasksContainer = document.getElementById('todayTasks');
+                const upcomingTasksContainer = document.getElementById('upcomingTasks');
+
+                // Display today's tasks
+                todayTasksContainer.innerHTML = data.todayTasks.length > 0
+                    ? data.todayTasks.map(task => createTaskElement(task)).join('')
+                    : '<p class="text-gray-500 text-center">No tasks scheduled for today</p>';
+
+                // Display upcoming tasks
+                upcomingTasksContainer.innerHTML = data.upcomingTasks.length > 0
+                    ? data.upcomingTasks.map(task => createTaskElement(task)).join('')
+                    : '<p class="text-gray-500 text-center">No upcoming tasks</p>';
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        // Handle new task submission
+        document.getElementById('taskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                email: userEmail,
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                scheduledDate: document.getElementById('scheduledDate').value
+            };
+
+            try {
+                const response = await fetch('/tasks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    // Clear form
+                    e.target.reset();
+                    // Refresh tasks display
+                    fetchTasks();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Failed to create task');
+                }
+            } catch (error) {
+                console.error('Error creating task:', error);
+                alert('An error occurred while creating the task');
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            window.location.href = '/login.html';
+        });
+
+        // Initial fetch of tasks
+        fetchTasks();
+
+        // Set minimum date for scheduledDate input to current date/time
+        const scheduledDateInput = document.getElementById('scheduledDate');
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        scheduledDateInput.min = now.toISOString().slice(0, 16);
+    </script>
+</body>
+</html>
