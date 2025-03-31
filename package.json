@@ -1,0 +1,14 @@
+{
+  "name": "task-scheduler",
+  "version": "1.0.0",
+  "description": "A task scheduling web application with OTP authentication",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "nodemailer": "^6.10.0"
+  }
+}
